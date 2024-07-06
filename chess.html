@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chess Game - Sky High Chess League</title>
+    <style>
+        body {
+            background: linear-gradient(to bottom, #00f, #0ff);
+            color: #fff;
+            text-align: center;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .chessboard {
+            display: grid;
+            grid-template-columns: repeat(8, 50px);
+            grid-template-rows: repeat(8, 50px);
+            gap: 0;
+            margin: 20px auto;
+            border: 2px solid #000;
+            width: 400px;
+            background-color: #000; /* Changed chessboard color to black */
+        }
+
+        .square {
+            width: 50px;
+            height: 50px;
+        }
+
+        .white {
+            background-color: #0ff; /* Changed white square color to light blue */
+        }
+
+        .black {
+            background-color: #00f; /* Changed black square color to blue */
+        }
+
+        .piece {
+            width: 100%;
+            height: 100%;
+            font-size: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            color: #fff; /* Font color */
+        }
+
+        .piece.black {
+            color: #000; /* Font color for black pieces */
+        }
+
+        .red-square {
+            background-color: red !important;
+        }
+
+        .banner {
+            background-color: #003366;
+            color: #fff;
+            padding: 10px;
+            margin-top: 20px;
+        }
+
+        .banner a {
+            color: #fff;
+            text-decoration: none;
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.11.0/chess.min.js"></script>
+</head>
+<body>
+    <h1>Chess Game</h1>
+    <div class="chessboard" id="chessboard"></div>
+    <div class="banner">
+        <a href="index.html">Back to Home</a>
+    </div>
+    <script>
+        const chess = new Chess();
+        const chessboard = document.getElementById('chessboard');
+
+        function createBoard() {
+            chessboard.innerHTML = '';
+            const board = chess.board();
+            for (let row = 0; row < 8; row++) {
+                for (let col = 0; col < 8; col++) {
+                    const square = document.createElement('div');
+                    square.classList.add('square');
+                    square.classList.add((row + col) % 2 === 0 ? 'white' : 'black');
+                    const piece = board[row][col];
+                    if (piece) {
+                        const pieceElement = document.createElement('div');
+                        pieceElement.classList.add('piece');
+                        pieceElement.classList.add(piece.color);
+                        pieceElement.textContent = piece.type.toUpperCase();
+                        pieceElement.setAttribute('data-piece', piece.color + piece.type);
+                        pieceElement.draggable = true;
+                        pieceElement.id = `${row}-${col}`;
+                        square.appendChild(pieceElement);
+                    }
+                    square.id = `square-${row}-${col}`;
+                    chessboard.appendChild(square);
+                }
+            }
+        }
+
+        chessboard.addEventListener('dragstart', function (event) {
+            event.dataTransfer.setData('text', event.target.id);
+        });
+
+        chessboard.addEventListener('dragover', function (event) {
+            event.preventDefault();
+        });
+
+        chessboard.addEventListener('drop', function (event) {
+            event.preventDefault();
+            const pieceId = event.dataTransfer.getData('text');
+            const pieceElement = document.getElementById(pieceId);
+            const targetSquare = event.target.closest('.square');
+
+            if (targetSquare && targetSquare !== pieceElement.parentNode) {
+                const from = pieceId.split('-').map(Number);
+                const to = targetSquare.id.split('-').slice(1).map(Number);
+
+                const move = {
+                    from: String.fromCharCode(97 + from[1]) + (8 - from[0]),
+                    to: String.fromCharCode(97 + to[1]) + (8 - to[0])
+                };
+
+                if (chess.move(move)) {
+                    createBoard();
+                    if (chess.in_check()) {
+                        targetSquare.classList.add('red-square');
+                    } else {
+                        targetSquare.classList.remove('red-square');
+                    }
+                    if (chess.in_checkmate()) {
+                        alert('Checkmate!');
+                    }
+                } else {
+                    console.log('Invalid move');
+                }
+            }
+        });
+
+        createBoard();
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz - Sky High Chess League</title>
+</head>
+<body>
+    <h1>Quiz</h1>
+
+    <form id="quizForm">
+        <div id="questionContainer" class="hidden">
+            <div id="question"></div>
+            <input type="text" id="answer" placeholder="Your Answer">
+            <button type="button" onclick="checkAnswer()">Check Answer</button>
+            <span id="result"></span>
+        </div>
+
+        <button type="button" onclick="backHome()">Back Home</button>
+    </form>
+
+    <script>
+        const questions = [
+            {
+                question: "Who is the owner of SKYLE?",
+                answer: "Hitansh"
+            },
+            {
+                question: "Who is the game dev?",
+                answer: "Hugo"
+            },
+            {
+                question: "How many SAs are there?",
+                answer: "four"
+            }
+        ];
+
+        function backHome() {
+            window.location.href = "index.html"; // Navigate back to homepage
+        }
+
+        function getRandomQuestion() {
+            const randomIndex = Math.floor(Math.random() * questions.length);
+            return questions[randomIndex];
+        }
+
+        function displayQuestion() {
+            const randomQuestion = getRandomQuestion();
+            document.getElementById("question").textContent = randomQuestion.question;
+            document.getElementById("questionContainer").classList.remove("hidden");
+        }
+
+        function checkAnswer() {
+            const userAnswer = document.getElementById("answer").value.trim().toLowerCase();
+            const correctAnswer = questions.find(q => q.question === document.getElementById("question").textContent).answer;
+            const resultSpan = document.getElementById("result");
+
+            if (userAnswer === correctAnswer.toLowerCase()) {
+                resultSpan.textContent = "Correct";
+            } else {
+                resultSpan.textContent = "Incorrect";
+            }
+        }
+
+        displayQuestion(); // Display a random question when the page loads
+    </script>
+</body>
+</html>
+
+
+

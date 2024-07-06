@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Are You Bored? - Sky High Chess League</title>
+    <style>
+        body {
+            background: linear-gradient(to bottom, #00f, #0ff);
+            color: #fff;
+            text-align: center;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        h2 {
+            margin-top: 20px;
+        }
+
+        .games-section {
+            margin-top: 30px;
+        }
+
+        .game-banner {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            margin-bottom: 20px;
+        }
+
+        .game-banner img {
+            width: 200px;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            margin-bottom: 10px;
+        }
+
+        .game-banner button {
+            padding: 10px 20px;
+            font-size: 1em;
+            background-color: #ffcc00;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .game-banner button:hover {
+            background-color: #e6b800;
+        }
+
+        #game-board, #rps-game, #guess-game {
+            display: none; /* Initially hidden */
+            margin: 20px auto;
+        }
+
+        #game-board {
+            display: grid;
+            grid-template-columns: repeat(3, 100px);
+            grid-template-rows: repeat(3, 100px);
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .cell {
+            width: 100px;
+            height: 100px;
+            background-color: #fff;
+            color: #000;
+            font-size: 2em;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+
+        #rps-result, #guess-result {
+            margin-top: 10px;
+            font-size: 1.2em;
+        }
+
+        input[type="text"] {
+            padding: 10px;
+            font-size: 1em;
+            margin-top: 10px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 1em;
+            margin-top: 10px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            background-color: #ffcc00;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        }
+
+        button:hover {
+            background-color: #e6b800;
+        }
+
+        .back-home {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h2>Are You Bored?</h2>
+    <p>Try some of these fun games to pass the time!</p>
+
+    <div class="games-section">
+        <!-- Tic-Tac-Toe Game -->
+        <div class="game-banner">
+            <img src="https://i.postimg.cc/ZvztK9nc/tic-tac-toe.jpg" alt="Tic-Tac-Toe">
+            <button onclick="showTicTacToe()">Play Tic-Tac-Toe</button>
+        </div>
+
+        <!-- Rock-Paper-Scissors Game -->
+        <div class="game-banner">
+            <img src="https://i.postimg.cc/hX9mB45x/rock-paper-scissors.jpg" alt="Rock-Paper-Scissors">
+            <button onclick="showRPSGame()">Play Rock-Paper-Scissors</button>
+        </div>
+
+        <!-- Number Guessing Game -->
+        <div class="game-banner">
+            <img src="https://i.postimg.cc/jWPZBrzk/guessing-game.jpg" alt="Guessing Game">
+            <button onclick="showGuessGame()">Play Number Guessing Game</button>
+        </div>
+    </div>
+
+    <!-- Tic-Tac-Toe Game Board -->
+    <div id="game-board">
+        <!-- Tic-Tac-Toe game board will be generated here -->
+    </div>
+
+    <div id="status"></div>
+
+    <!-- Rock-Paper-Scissors Game -->
+    <div id="rps-game">
+        <h3>Rock-Paper-Scissors</h3>
+        <button onclick="playRPS('rock')">Rock</button>
+        <button onclick="playRPS('paper')">Paper</button>
+        <button onclick="playRPS('scissors')">Scissors</button>
+        <div id="rps-result"></div>
+    </div>
+
+    <!-- Number Guessing Game -->
+    <div id="guess-game">
+        <h3>Number Guessing Game</h3>
+        <p>Guess a number between 1 and 100</p>
+        <input type="text" id="guess-input">
+        <button onclick="checkGuess()">Submit Guess</button>
+        <div id="guess-result"></div>
+    </div>
+
+    <!-- Back to Home Button -->
+    <div class="back-home">
+        <button onclick="backHome()">Back to Home</button>
+    </div>
+
+    <script>
+        const boardElement = document.getElementById('game-board');
+        const statusElement = document.getElementById('status');
+        const cells = Array(9).fill(null);
+        let currentPlayer = 'X';
+        let isGameActive = true;
+
+        function showTicTacToe() {
+            hideAllGames();
+            createBoard();
+            boardElement.style.display = 'grid';
+            statusElement.style.display = 'block';
+            statusElement.textContent = `Player ${currentPlayer}'s turn`;
+        }
+
+        function createBoard() {
+            boardElement.innerHTML = '';
+            cells.forEach((cell, index) => {
+                const cellElement = document.createElement('div');
+                cellElement.classList.add('cell');
+                cellElement.dataset.index = index;
+                cellElement.addEventListener('click', handleCellClick);
+                boardElement.appendChild(cellElement);
+            });
+        }
+
+        function handleCellClick(event) {
+            const cellElement = event.target;
+            const index = cellElement.dataset.index;
+
+            if (cells[index] !== null || !isGameActive) {
+                return;
+            }
+
+            cells[index] = currentPlayer;
+            cellElement.textContent = currentPlayer;
+
+            if (checkWinner()) {
+                statusElement.textContent = `Player ${currentPlayer} wins!`;
+                isGameActive = false;
+            } else if (cells.every(cell => cell !== null)) {
+                statusElement.textContent = 'Draw!';
+                isGameActive = false;
+            } else {
+                currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+                statusElement.textContent = `Player ${currentPlayer}'s turn`;
+            }
+        }
+
+        function checkWinner() {
+            const winningCombinations = [
+                [0, 1, 2],
+                [3, 4, 5],
+                [6, 7, 8],
+                [0, 3, 6],
+                [1, 4, 7],
+                [2, 5, 8],
+                [0, 4, 8],
+                [2, 4, 6]
+            ];
+
+            return winningCombinations.some(combination => {
+                const [a, b, c] = combination;
+                return cells[a] !== null && cells[a] === cells[b] && cells[a] === cells[c];
+            });
+        }
+
+        function showRPSGame() {
+            hideAllGames();
+            document.getElementById('rps-game').style.display = 'block';
+        }
+
+        function playRPS(userChoice) {
+            const choices = ['rock', 'paper', 'scissors'];
+            const computerChoice = choices[Math.floor(Math.random() * choices.length)];
+            let result = '';
+
+            if (userChoice === computerChoice) {
+                result = "It's a draw!";
+            } else if (
+                (userChoice === 'rock' && computerChoice === 'scissors') ||
+                (userChoice === 'paper' && computerChoice === 'rock') ||
+                (userChoice === 'scissors' && computerChoice === 'paper')
+            ) {
+                result = 'You win!';
+            } else {
+                result = 'You lose!';
+            }
+
+            document.getElementById('rps-result').textContent = `You chose ${userChoice}, computer chose ${computerChoice}. ${result}`;
+        }
+
+        function showGuessGame() {
+            hideAllGames();
+            document.getElementById('guess-game').style.display = 'block';
+        }
+
+        const randomNumber = Math.floor(Math.random() * 100) + 1;
+        function checkGuess() {
+            const userGuess = parseInt(document.getElementById('guess-input').value);
+            let result = '';
+
+            if (userGuess === randomNumber) {
+                result = 'Congratulations! You guessed the right number!';
+            } else if (userGuess < randomNumber) {
+                result = 'Too low! Try again.';
+            } else if (userGuess > randomNumber) {
+                result = 'Too high! Try again.';
+            }
+
+            document.getElementById('guess-result').textContent = result;
+        }
+
+        function hideAllGames() {
+            boardElement.style.display = 'none';
+            statusElement.style.display = 'none';
+            document.getElementById('rps-game').style.display = 'none';
+            document.getElementById('guess-game').style.display = 'none';
+        }
+
+        function backHome() {
+            window.location.href = 'index.html'; // Navigate back to homepage
+        }
+    </script>
+</body>
+</html>
+

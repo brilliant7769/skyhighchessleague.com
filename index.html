@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sky High Chess League</title>
+    <style>
+        body {
+            background: linear-gradient(to bottom, #00f, #0ff);
+            color: #fff;
+            text-align: center;
+            font-family: Arial, sans-serif;
+            margin: 0;
+        }
+
+        .nav-container {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            display: flex;
+            gap: 10px;
+            z-index: 10; /* Ensure navigation is above the banner */
+        }
+
+        .nav-item {
+            background: #003366;
+            border-radius: 5px;
+            padding: 10px;
+        }
+
+        .nav-item a {
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .search-bar {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 10; /* Ensure search bar is above the banner */
+        }
+
+        .search-bar input[type="text"] {
+            padding: 10px;
+            border-radius: 5px;
+            border: none;
+            outline: none;
+        }
+
+        .main-title {
+            margin-top: 50px;
+            font-size: 2.5em;
+            background: linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet);
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+
+        .sub-title {
+            color: orange;
+            font-size: 1.5em;
+        }
+
+        .banner-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .banner {
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .banner a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .banner-chess {
+            background-color: orange;
+        }
+
+        .banner-discord {
+            background-color: #7289DA;
+        }
+
+        .home-banner {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2em;
+            animation: fadeOut 3s ease forwards;
+            z-index: 5; /* Ensure banner is below the navigation */
+        }
+
+        @keyframes fadeOut {
+            0% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .image-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 30px;
+            height: 100vh; /* Set container height to full viewport height */
+            overflow-y: auto; /* Enable vertical scrolling */
+        }
+
+        .image-frame {
+            border: 10px solid #39ff14; /* Neon green border */
+            padding: 30px; /* Increased padding for bigger frame */
+            border-radius: 30px; /* Increased border radius for bigger frame */
+            box-shadow: 0 0 30px #39ff14, 0 0 40px #39ff14, 0 0 50px #39ff14; /* Neon effect */
+            margin-top: -20px; /* Move frame up */
+            margin-bottom: 20px; /* Add space below frame */
+            display: flex; /* Added */
+            justify-content: flex-end; /* Align frame to the right */
+        }
+
+        .image-frame a {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
+        .image-frame img {
+            width: 100%; /* Set image width to 100% of container */
+            height: auto; /* Auto-adjust height */
+            border-radius: 15px; /* Increased border radius for bigger picture */
+        }
+
+        .image-description {
+            margin-left: 20px;
+            text-align: left;
+            color: #fff;
+            margin-top: -20px; /* Move description up */
+            flex-grow: 1; /* Allow description to grow */
+        }
+
+        .small-banner {
+            margin-top: 10px;
+            padding: 5px 10px;
+            border-radius: 5px;
+            background-color: #ffcc00;
+            color: #000;
+            font-weight: bold;
+            display: inline-block;
+        }
+
+        .small-banner a {
+            color: #000;
+            text-decoration: none;
+        }
+
+        .search-results {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="home-banner" id="homeBanner">
+        Welcome to Sky High Chess League!
+    </div>
+
+    <div class="nav-container">
+        <div class="nav-item"><a href="index.html" onclick="navigateHome()">Home</a></div>
+        <div class="nav-item"><a href="aboutus.html">About Us</a></div>
+        <div class="nav-item"><a href="quiz.html">Quiz</a></div>
+        <div class="nav-item"><a href="chess.html">Chess</a></div>
+        <div class="nav-item"><a href="bored.html">Are You Bored?</a></div>
+    </div>
+
+    <div class="search-bar">
+        <input type="text" id="searchInput" placeholder="Search..." oninput="searchContent()">
+    </div>
+
+    <h1 class="main-title">Welcome to Sky High Chess League's Official Website</h1>
+    <h2 class="sub-title">This is the official website of SKYLE</h2>
+    <p>Join us for exciting chess tournaments and events!</p>
+
+    <div class="banner-container">
+        <div class="banner banner-chess">
+            <a href="https://www.chess.com" target="_blank">Join our Chess.com Club</a>
+        </div>
+        <div class="banner banner-discord">
+            <a href="https://discord.gg/GMj45Nqe" target="_blank">Join our Discord Server</a>
+        </div>
+    </div>
+
+    <div class="image-container">
+        <div class="image-frame">
+            <a href="bored.html">
+                <img src="https://i.postimg.cc/s1rsRxq2/bored.jpg" alt="Bored Image" id="boredImage">
+            </a>
+        </div>
+        <div class="image-description">
+            <p>Are you bored? Visit our variety of games that will make you happy.</p>
+            <div class="small-banner"><a href="bored.html">Try</a></div>
+        </div>
+    </div>
+
+    <div class="search-results" id="searchResults"></div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const banner = document.getElementById("homeBanner");
+            setTimeout(() => {
+                banner.classList.add("hidden");
+            }, 3000); // Hide banner after 3 seconds
+        });
+
+        function navigateHome() {
+            window.location.href = window.location.href.split('#')[0];
+        }
+
+        function searchContent() {
+            const input = document.getElementById('searchInput').value.toLowerCase();
+            const resultsContainer = document.getElementById('searchResults');
+            resultsContainer.innerHTML = '';
+
+            if (input) {
+                const contents = [
+                    { title: 'About Us', url: 'aboutus.html', content: 'Information about Sky High Chess League' },
+                    { title: 'Quiz', url: 'quiz.html', content: 'Test your knowledge with our quiz' },
+                    { title: 'Chess', url: 'chess.html', content: 'Play and learn chess' },
+                    { title: 'Are You Bored?', url: 'bored.html', content: 'Fun games to pass the time' }
+                ];
+
+                const results = contents.filter(item => item.title.toLowerCase().includes(input) || item.content.toLowerCase().includes(input));
+
+                if (results.length > 0) {
+                    results.forEach(result => {
+                        const resultItem = document.createElement('div');
+                        resultItem.innerHTML = `<a href="${result.url}" style="color: #ffcc00;">${result.title}</a> - ${result.content}`;
+                        resultsContainer.appendChild(resultItem);
+                    });
+                } else {
+                    resultsContainer.innerHTML = '<p style="color: #ffcc00;">No results found</p>';
+                }
+            }
+        }
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                
+
+
+
+
+
+
+
+    
+
+      
+
+
+
+
+
+
+ 
+
+
+      
+
+
+
+
+
